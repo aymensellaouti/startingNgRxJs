@@ -9,14 +9,7 @@ import { API } from '../../../config/api.config';
 })
 export class CvService {
   private cvs: Cv[] = [];
-  private selectCvSubject = new Subject<Cv>();
 
-  /**
-   *
-   * Si vous voulez avoir le cv sélectionné inscrivez vous ici
-   *
-   */
-  selectCv$ = this.selectCvSubject.asObservable().pipe(distinctUntilChanged());
   constructor(private http: HttpClient) {
     this.cvs = [
       new Cv(1, 'aymen', 'sellaouti', 'teacher', 'as.jpg', '1234', 40),
@@ -99,16 +92,5 @@ export class CvService {
       return true;
     }
     return false;
-  }
-
-  /**
-   *
-   * Emet le cv sélectionné à tous les observateurs
-   *
-   * @param cv: Cv
-   *
-   */
-  selectCv(cv: Cv) {
-    this.selectCvSubject.next(cv);
   }
 }
