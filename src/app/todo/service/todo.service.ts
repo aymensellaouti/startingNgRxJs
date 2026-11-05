@@ -1,23 +1,30 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Todo } from '../model/todo';
 import { LoggerService } from '../../services/logger.service';
+import { TodoApi } from '../model/todo-api.model';
+import { HttpClient } from '@angular/common/http';
+import { API } from 'src/config/api.config';
+import { map, Observable, tap } from 'rxjs';
 
-let n = 1;
 
 @Injectable({
   providedIn: 'root',
 })
 export class TodoService {
-  private todos: Todo[] = [];
-  constructor(private loggerService: LoggerService) {}
+  private todos: TodoApi[] = [];
+  http = inject(HttpClient)
 
   /**
    * elle retourne la liste des todos
    *
-   * @returns Todo[]
+   * @returns TodoApi[]
    */
-  getTodos(): Todo[] {
-    return this.todos;
+  getTodos(): Observable<TodoApi[]> {
+    return this.http.get<{todos:TodoApi[]}>(API.todo).pipe(
+      tap(response => console.log(response)),
+      map(respone => respone.todos),
+      tap(response => console.log(response)),
+    );
   }
 
   /**
@@ -26,7 +33,7 @@ export class TodoService {
    * @param todo: Todo
    *
    */
-  addTodo(todo: Todo): void {
+  addTodo(todo: TodoApi): void {
     this.todos.push(todo);
   }
 
@@ -36,7 +43,7 @@ export class TodoService {
    * @param todo: Todo
    * @returns boolean
    */
-  deleteTodo(todo: Todo): boolean {
+  deleteTodo(todo: TodoApi): boolean {
     const index = this.todos.indexOf(todo);
     if (index > -1) {
       this.todos.splice(index, 1);
@@ -45,10 +52,4 @@ export class TodoService {
     return false;
   }
 
-  /**
-   * Logger la liste des todos
-   */
-  logTodos() {
-    this.loggerService.logger(this.todos);
-  }
 }

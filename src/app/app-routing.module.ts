@@ -9,15 +9,29 @@ import { CvComponent } from './cv/cv/cv.component';
 import { DetailsCvComponent } from './cv/details-cv/details-cv.component';
 
 import { authenticationGuard } from './auth/guards/authentication.guard';
+import { CvTabsComponent } from './cv/cv-tabs/cv-tabs';
+import { DashboardComponent } from './cv/dashboard/dashboard.component';
 
 const routes: Route[] = [
-  { path: '', redirectTo: "cv", pathMatch: 'full' },
+  { path: '', redirectTo: 'cv', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   {
     path: 'cv',
     component: CvComponent,
   },
-  { path: 'cv/add', component: AddCvComponent, canActivate: [authenticationGuard] },
+  {
+    path: 'cvtabs',
+    component: CvTabsComponent,
+  },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+  },
+  {
+    path: 'cv/add',
+    component: AddCvComponent,
+    canActivate: [authenticationGuard],
+  },
   { path: 'cv/:id', component: DetailsCvComponent },
   { path: 'todo', component: TodoComponent },
   { path: '**', component: NF404Component },
